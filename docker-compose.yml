@@ -1,4 +1,3 @@
-version: '3.9'
 
 services:
   fastapi:
@@ -15,3 +14,25 @@ services:
     image: redis:7
     ports:
       - "6379:6379"
+    volumes:
+      - redis-data:/data    # <-- persist Redis data here
+  # celery:
+  #   build: .
+  #   command: celery -A celery_worker.celery worker --loglevel=info
+  #   depends_on:
+  #     - redis
+  #   environment:
+  #     - REDIS_HOST=redis
+  #     - REDIS_PORT=6379
+
+  # flower:  # Optional UI for monitoring Celery
+  #   image: mher/flower
+  #   ports:
+  #     - "5555:5555"
+  #   environment:
+  #     - FLOWER_BROKER=redis://redis:6379/0
+
+  #   depends_on:
+  #     - redis
+volumes:
+  redis-data:
